@@ -26,7 +26,7 @@ window.VolumeDrawer = function(canvasID, rawData){
   var context = document.getElementById(canvasID).getContext("2d");
 	var width = context.canvas.width;
 	var height = context.canvas.height;
-	//High pixel density displays - multiply the size of the canvas height/width by the device pixel ratio, then scale.
+
 	if (window.devicePixelRatio) {
 		context.canvas.style.width = width + "px";
 		context.canvas.style.height = height + "px";
@@ -57,10 +57,11 @@ window.VolumeDrawer = function(canvasID, rawData){
 
   var pixels = (width-leftMargin-rightMargin)/(d.length+1);
 
-  var hh = this.Max(v.slice(0,Math.min(v.length, (width-leftMargin-rightMargin) / pixels)));
-  var ll = this.Min(v.slice(0,Math.min(v.length, (width-leftMargin-rightMargin) / pixels)));
-  // improve hh, ll
-  var range = hh-ll;
+  var high = this.Max(v.slice(0,Math.min(v.length, (width-leftMargin-rightMargin) / pixels)));
+  var low = this.Min(v.slice(0,Math.min(v.length, (width-leftMargin-rightMargin) / pixels)));
+
+  var range = high-low;
+  
   var step = 1;
   while (range/step > 16){
     if (step<4) {
@@ -75,22 +76,23 @@ window.VolumeDrawer = function(canvasID, rawData){
 
   }
 
-  ll = step * Math.floor(ll/step);
-  hh = step * Math.ceil(hh/step);
+  low = step * Math.floor(low/step);
+  high = step * Math.ceil(high/step);
 
 
-  var upperIndicators = new Array();
+  var upperIndicators = new Array(); 
   var lowerIndicator = {};
 
 
 
-  context.fillStyle = "rgb(240,240,220)";//pale yellow
+  context.fillStyle = "rgb(240,240,220)";
   context.fillRect(0,0,width-1,height-1);
-  context.fillStyle = "rgb(250,250,200)";//pale yellow
+
+  context.fillStyle = "rgb(250,250,200)";
   context.fillRect  (leftMargin,topMargin,width-leftMargin-rightMargin,height-topMargin-bottomMargin);
 
-  for (var i=ll; i<=hh; i+=step){
-    var y0 = scale(ll,hh,height,topMargin,bottomMargin, i);
+  for (var i=low; i<=high; i+=step){
+    var y0 = scale(low,high,height,topMargin,bottomMargin, i);
     context.moveTo(leftMargin, y0);
     context.lineTo(width-rightMargin, y0);
     context.textBaseline = 'middle';
@@ -100,11 +102,11 @@ window.VolumeDrawer = function(canvasID, rawData){
   context.strokeStyle = 'rgb(200,200,150)';
   context.stroke();
 
-
-  // X coordinate - month ticks (for weekly charts, for daily chart use 3 letter for each month)
+//--------------------------------------------------------------------------------------------------------
+  // Creates the monthly marks
   context.beginPath();
-  var y0 = scale(ll,hh,height, topMargin,bottomMargin, ll);
-  var y1 = scale(ll,hh,height, topMargin,bottomMargin, hh);
+  var y0 = scale(low,high,height, topMargin,bottomMargin, low);
+  var y1 = scale(low,high,height, topMargin,bottomMargin, high);
   for (var i=0; i<d.length-1 && i<(width-leftMargin-rightMargin-pixels)/pixels; i++){
     if (d[i].getMonth()!=d[i+1].getMonth()){
       var x0 = (width-rightMargin) - (i+1)*pixels -1;
@@ -123,33 +125,35 @@ window.VolumeDrawer = function(canvasID, rawData){
   context.stroke();
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
-// draw the line
+// draw the bars
 
-var x=0;
-var y=0;
+// set the initial second point
+var x2=0;
+var y2=0;
 
   for (var i=0; i<c.length && i<(width-leftMargin-rightMargin-pixels)/pixels; i++){
 
-    var yv = scale(ll,hh,height, topMargin,bottomMargin, v[i]), x0 = (width-rightMargin) - (i+1)*pixels;
+    var y1 = scale(low,high,height, topMargin,bottomMargin, v[i]);
+    var x1 = (width-rightMargin) - (i+1)*pixels;
 
     context.beginPath();
 
-    if(x!=0 && y!=0){
-      context.moveTo(x0,height-bottomMargin);
-      context.lineTo(x0,yv);
+    if(x2!=0 && y2!=0){
+      context.moveTo(x1,height-bottomMargin);
+      context.lineTo(x1,y1);
     }
     context.strokeStyle = 'blue';
     context.stroke();
-    x=x0;
-    y=yv;
+    x2=x1;
+    y2=y1;
   }
 
 //-------------------------------------------------------------------------------------------------------------------
   upperIndicators.push(lowerIndicator);
   this.data = [financialDataObject, upperIndicators];
 
-  function scale(ll, hh, height, topMargin, bottomMargin, y){
-    return topMargin+(height-topMargin-bottomMargin)*(1 - (y-ll)/(hh-ll));
+  function scale(low, high, height, topMargin, bottomMargin, y){
+    return topMargin+(height-topMargin-bottomMargin)*(1 - (y-low)/(high-low));
   }
 //------------------------------------------------------------------------------------------------------------------
   function convertCsv(rawData) { // this method takes the raw data and returns an object with all important datatypes
@@ -163,16 +167,16 @@ var y=0;
       var entries = allTextLines[i].split(',');
       d.push(new Date(entries[0]));
       var oo = entries[1]
-        , hh = entries[2]
-        , ll = entries[3]
+        , high = entries[2]
+        , low = entries[3]
         , cc = entries[4]
         , vv = entries[5]
         , adjC = entries[6];
 
 
       o.push(Number((oo*1).toFixed(2)));
-      h.push(Number((hh*1).toFixed(2)));
-      l.push(Number((ll*1).toFixed(2)));
+      h.push(Number((high*1).toFixed(2)));
+      l.push(Number((low*1).toFixed(2)));
       c.push(Number((cc*1).toFixed(2)));
       v.push(Number((vv/1).toFixed(0)));
     }
