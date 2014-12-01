@@ -1,5 +1,6 @@
 <html>
   <head>
+    <link rel="stylesheet" href="style.css">
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="../../GraphDrawer.js"></script>
     <script src="../../VolumeDrawer.js"></script>
@@ -18,7 +19,7 @@
         });
         //----------------------------------------------------------
 
-        $('#time').change(function(event) { // dynamically load the page
+        $('#time').change(function(event) { // dynamically load the header and the cnavas
           var $company = $("#company").val();
           var $time = $("#time").val();
           var $fileString = "../../data/" + $company + $time + ".txt";
@@ -32,7 +33,7 @@
         });
 
 
-        $('#company').change(function(event) { // dynamically load the page
+        $('#company').change(function(event) { // dynamically load the header and the canvas
           var $company = $("#company").val();
           var $time = $("#time").val();
           var $fileString = "../../data/" + $company + $time + ".txt";
@@ -52,33 +53,33 @@
     </script>
   </head>
   <body>
-  <h1>GSU Stock Grapher</h1>
-    <select id="company">
-      <option value="yahoo">Yahoo</option>
-      <option value="gm">General Motors</option>
-    </select>
+    <div id = "wrapper">
+      <h1>GSU Stock Grapher</h1>
+        <div id="content">
+            <select id="company">
+              <option value="yahoo">Yahoo</option>
+              <option value="gm">General Motors</option>
+              <option value="microsoft">Microsoft</option>
+              <option value="apple">Apple</option>
+              <option value="nintendo">Nintendo</option>
+              <option value="sony">Sony</option>
+            </select>
 
-    <select id="time">
-      <option value="3months">3 Months</option>
-      <option value="6months">6 Months</option>
-      <option value="1yr">1 Year</option>
-      <option value="2yr">2 Years</option>
-    </select>
+            <select id="time">
+              <option value="3months">3 Months</option>
+              <option value="6months">6 Months</option>
+              <option value="1yr">1 Year</option>
+              <option value="2yr">2 Years</option>
+            </select>
 
-    <!--
-    <select>
-      <option value="3Months">3 Months</option>
-      <option value="6Months">6 Months</option>
-      <option value="1Year">1 Year</option>
-    </select>
-    -->
-    <div id="content">
-      <div id="header">
-        <h2>Google</h2>
-      </div>
-        <canvas id="myChart" width="1000" height="500"></canvas>
-      <h4>Volume</h4>
-        <canvas id="volumeChart" width="1000" height="200"></canvas>
+            
+              <div id="header">
+                <h2>Google</h2> 
+              </div>
+                <canvas id="myChart" width="1000" height="500"></canvas>
+              <h4>Volume</h4>
+                <canvas id="volumeChart" width="1000" height="200"></canvas>
+        </div>
     </div>
   </body>
 </html>

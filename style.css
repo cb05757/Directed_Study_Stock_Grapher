@@ -1,0 +1,42 @@
+body{
+	background-color:rgb(221,221,221);
+}
+
+
+h1 {
+	background-color: rgb(24, 49, 90);
+	color: #FFFFFF;
+	line-height: 190%;
+	padding-left:20px;
+	min-height: 70px;
+	margin-bottom:4px;
+}
+
+
+h2{
+	color:#000000;
+}
+
+	
+h3{
+	color:#000000;
+}
+
+
+#wrapper{
+	width:95%;
+	margin-right:auto;
+	margin-left:auto;
+	background-color: rgb(18,37,67);
+	min-width: 700px;
+}
+
+
+#content{
+	padding-top: 4px;
+	margin-top:4px;
+	padding-left:20px;
+	padding-right:20px;
+	background-color: #FFFFFF;
+}
+

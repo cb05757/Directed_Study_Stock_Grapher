@@ -97,7 +97,37 @@ window.VolumeDrawer = function(canvasID, rawData){
     context.lineTo(width-rightMargin, y0);
     context.textBaseline = 'middle';
     context.fillStyle = 'black';
-    context.fillText(i, width-rightMargin+2, y0);
+
+    var stepVolume;
+    var stepDecimal;
+
+    if(i>=10000 && i<1000000){ // 10,000 to 99,000 // display 25K
+      stepDecimal = String(i);
+      stepVolume = String(i);
+      stepDecimal = stepDecimal.charAt(stepDecimal.length - 2)
+      stepVolume = stepVolume.substring(0, stepVolume.length - 3);
+      context.fillText(stepVolume + "." + stepDecimal + "K", width-rightMargin+2, y0);
+
+
+    }else if(i>=1000000 && i<1000000000){ // 1,000,000 to 999,999,999
+      stepDecimal = String(i);
+      stepVolume = String(i);
+      stepDecimal = stepDecimal.charAt(stepDecimal.length - 5)
+      stepVolume = stepVolume.substring(0, stepVolume.length - 6);
+      context.fillText(stepVolume + "." + stepDecimal + "M", width-rightMargin+2, y0);
+
+    }else if(i>=1000000000 && i<1000000000000){ // 1,000,000,000 to 999,999,999,999
+      stepDecimal = String(i);
+      stepVolume = String(i);
+      stepDecimal = stepDecimal.charAt(stepDecimal.length - 8)
+      stepVolume = stepVolume.substring(0, stepVolume.length - 9);
+      context.fillText(stepVolume + "." + stepDecimal + "B", width-rightMargin+2, y0);
+
+
+    }else{
+      context.fillText(i, width-rightMargin+2, y0);
+    }
+    
   }
   context.strokeStyle = 'rgb(200,200,150)';
   context.stroke();
@@ -112,7 +142,7 @@ window.VolumeDrawer = function(canvasID, rawData){
       var x0 = (width-rightMargin) - (i+1)*pixels -1;
       context.moveTo(x0, y0);
       context.lineTo(x0, y1);
-      mm = ['J','F','M','A','M','J','J','A','S','O','N','D'][d[i].getMonth()];
+      mm = ['Jan','Feb','Mar','Apr','May','Jan','Jul','Apr','Sep','Oct','Nov','Dec'][d[i].getMonth()];
       if (d[i].getMonth()==0) {
         mm = (''+d[i].getFullYear()).substr(2,2);
       }

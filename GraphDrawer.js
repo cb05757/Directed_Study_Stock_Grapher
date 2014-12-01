@@ -89,7 +89,7 @@ window.GraphDrawer = function(canvasID, rawData){
     context.lineTo(width-rightMargin, y0);
     context.textBaseline = 'middle';
     context.fillStyle = 'black';
-    context.fillText(i, width-rightMargin+2, y0);
+    context.fillText("$"+i, width-rightMargin+2, y0);
   }
   context.strokeStyle = 'rgb(200,200,150)';
   context.stroke();
@@ -105,7 +105,7 @@ window.GraphDrawer = function(canvasID, rawData){
       var x0 = (width-rightMargin) - (i+1)*pixels -1;
       context.moveTo(x0, y0);
       context.lineTo(x0, y1);
-      mm = ['J','F','M','A','M','J','J','A','S','O','N','D'][d[i].getMonth()];
+      mm = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d[i].getMonth()];
       if (d[i].getMonth()==0) {
         mm = (''+d[i].getFullYear()).substr(2,2);
       }
